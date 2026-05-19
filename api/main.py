@@ -21,7 +21,6 @@ from fetchers import (
     fetch_gurufocus,
     fetch_reddit_sentiment,
     fetch_stocktwits,
-    fetch_x_sentiment,
 )
 
 DIGESTS_DIR = Path(__file__).parent.parent / "data" / "digests"
@@ -55,10 +54,9 @@ async def _gather_raw_data() -> dict:
         fetch_stocktwits(),
         fetch_fred_indicators(),
         fetch_gurufocus(),
-        fetch_x_sentiment(),
         return_exceptions=True,
     )
-    labels = ["reddit", "stocktwits", "fred", "gurufocus", "x"]
+    labels = ["reddit", "stocktwits", "fred", "gurufocus"]
     return {
         label: (r if not isinstance(r, Exception) else {"error": str(r)})
         for label, r in zip(labels, results)

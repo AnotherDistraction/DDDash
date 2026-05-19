@@ -141,7 +141,6 @@ const SocialPulse = ({ pulse }) => {
   const sources = [
     { key: "reddit", label: "Reddit" },
     { key: "stocktwits", label: "StockTwits" },
-    { key: "x", label: "X / Twitter" },
   ];
   return (
     <div className="mdi-section">

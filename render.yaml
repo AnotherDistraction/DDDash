@@ -20,6 +20,4 @@ services:
         sync: false
       - key: FRED_API_KEY
         sync: false
-      - key: X_BEARER_TOKEN
-        sync: false
     healthCheckPath: /health
