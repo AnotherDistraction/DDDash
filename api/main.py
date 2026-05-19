@@ -12,6 +12,8 @@ from apscheduler.triggers.cron import CronTrigger
 from dotenv import load_dotenv
 from fastapi import BackgroundTasks, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 
 load_dotenv()
 
@@ -25,6 +27,8 @@ from fetchers import (
 
 DIGESTS_DIR = Path(__file__).parent.parent / "data" / "digests"
 DIGESTS_DIR.mkdir(parents=True, exist_ok=True)
+
+FRONTEND_DIST = Path(__file__).parent.parent / "frontend" / "dist"
 
 ET = pytz.timezone("America/New_York")
 
@@ -198,3 +202,19 @@ async def digest_run(session: str, background_tasks: BackgroundTasks):
         "session": safe_session,
         "message": f"Digest '{safe_session}' running in background. Poll /digest/latest for results.",
     }
+
+
+# ---------------------------------------------------------------------------
+# Frontend — serve built Vite bundle (defined last so API routes take priority)
+# ---------------------------------------------------------------------------
+
+@app.get("/")
+async def root():
+    index = FRONTEND_DIST / "index.html"
+    if index.exists():
+        return FileResponse(str(index))
+    return {"message": "DDDash API", "docs": "/docs", "health": "/health"}
+
+
+if FRONTEND_DIST.exists():
+    app.mount("/", StaticFiles(directory=str(FRONTEND_DIST), html=True), name="frontend")

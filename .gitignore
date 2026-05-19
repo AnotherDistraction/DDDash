@@ -6,8 +6,8 @@ __pycache__/
 venv/
 env/
 *.egg-info/
-dist/
 build/
+frontend/dist/
 .pytest_cache/
 .mypy_cache/
 data/digests/*.json
